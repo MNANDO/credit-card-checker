@@ -1,5 +1,5 @@
 // All valid credit card numbers
-const valid1 = [4, 5, 3, 9, 6, 7, 7, 9, 0, 8, 0, 1, 6, 8, 0, 8]
+const valid1 = [4, 5, 3, 9, 6, 8, 9, 8, 8, 7, 7, 0, 5, 7, 9, 8]
 const valid2 = [5, 5, 3, 5, 7, 6, 6, 7, 6, 8, 7, 5, 1, 4, 3, 9]
 const valid3 = [3, 7, 1, 6, 1, 2, 0, 1, 9, 9, 8, 5, 2, 3, 6]
 const valid4 = [6, 0, 1, 1, 1, 4, 4, 3, 4, 0, 6, 8, 2, 9, 0, 5]
@@ -24,9 +24,79 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 
 
 // Add your functions below:
+function validateCard(arr: number[]): boolean {
+    const copy = arr.concat();
+    for (let i = copy.length - 2; i >= 0; i -= 2) {
+        copy[i] = copy[i] * 2; 
+        if (copy[i] > 9) {
+            copy[i] -= 9;
+        }
+    }
+    
+    let sum = 0;
 
+    for (let i = 0; i < copy.length; i++) {
+        sum += copy[i];
+    } 
+    if (sum % 10 === 0) {
+        return true;
+    }
+    return false;
+}
 
+function findInvalidCards(arr: number[][]) {
+    const invalidCards: number[][] = [];
+    arr.forEach(element => {
+        if (!validateCard(element)) {
+            invalidCards.push(element) 
+        }
+    });
+    return invalidCards;
+}
 
+function findInvalidCardsCompanies(invalids: number[][]) {
+    const companies = [ 
+        {
+            id: 3,
+            name: 'Amex'
+        },
+        {
+            id: 4,
+            name: 'Mastercard'
+        },
+        {
+            id: 5,
+            name: 'Visa'
+        },
+        {
+            id: 6, 
+            name: 'Discover'
+        }
+    ];
+
+    const invalidCompanies: string[] = [];
+
+    invalids.forEach(invalid => {
+        companies.forEach(company => {
+            if (company.id === invalid[0]) {
+                invalidCompanies.push(company.name);
+                return;
+            }
+        });
+    });
+
+    if (invalidCompanies.length === 0) {
+        return "Company not found"
+    }
+    else {
+        return invalidCompanies;
+    }
+
+}
+
+// console.log(findInvalidCards(batch))
+// console.log(findInvalidCards(batch))
+console.log(findInvalidCardsCompanies(findInvalidCards(batch)))
 
 
 
